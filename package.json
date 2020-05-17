@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/erkartali/bamazon#readme",
   "dependencies": {
+    "easy-table": "^1.1.1",
     "inquirer": "^7.1.0",
     "mysql": "^2.18.1"
   }
