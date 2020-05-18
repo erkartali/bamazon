@@ -10,23 +10,27 @@ var connection = mysql.createConnection({
   database: "bamazon_DB",
 });
 
-connection.query("SELECT * FROM product", function (err, results) {
-  if (err) throw err;
-  var data = results;
-  var t = new Table();
+function getStuff() {
+  connection.query("SELECT * FROM product", function (err, results) {
+    if (err) throw err;
+    var data = results;
+    var t = new Table();
 
-  data.forEach(function (result) {
-    t.cell("ID", result.id);
-    t.cell("Product Name", result.product_name);
-    t.cell("Department Name", result.department_name);
-    t.cell("Price", result.price);
-    t.cell("Stock", result.stock_quantity);
-    t.newRow();
+    data.forEach(function (result) {
+      t.cell("ID", result.id);
+      t.cell("Product Name", result.product_name);
+      t.cell("Department Name", result.department_name);
+      t.cell("Price", result.price);
+      t.cell("Stock", result.stock_quantity);
+      t.newRow();
+    });
+
+    console.log(t.toString());
+    purchaseItem();
   });
+}
 
-  console.log(t.toString());
-  purchaseItem();
-});
+getStuff();
 
 function purchaseItem() {
   connection.query("SELECT * FROM product", function (err, results) {
@@ -48,20 +52,47 @@ function purchaseItem() {
       .then(function (answer) {
         var chosenItem = answer.item;
         var chosenQuantity = answer.quantity;
-        var availableQuantity = 'SELECT stock_quantity FROM product WHERE id IN (' + chosenItem + ')';
-        var idArr = [];
-        console.log(availableQuantity);
-        for (var i = 0; i < results.length; i++) {
-          idArr.push(results[i].id);
-        }
+        chosenQuantity = Number(chosenQuantity);
+        // console.log(`chosen quantity: ${chosenQuantity}`);
+        var someVar = [];
 
-        chosenItem = parseInt(chosenItem);
+        var availableQuantity = connection.query(
+          "SELECT stock_quantity FROM product WHERE id IN (" + chosenItem + ")",
+          function (err, id) {
+            if (err) {
+              throw err;
+            } else {
+              setValue(id);
+            }
+          }
+        );
 
-        if (idArr.includes(chosenItem) ) {
-          console.log("The number is included!")
-        } else {
-          console.log("The id doesn't exist.");
-          purchaseItem()
+        function setValue(value) {
+            
+            availableQuantity = value;
+            newQuantity = availableQuantity[0].stock_quantity;
+            console.log(newQuantity);
+          var idArr = [];
+
+          for (var i = 0; i < results.length; i++) {
+            idArr.push(results[i].id);
+          }
+
+          chosenItem = parseInt(chosenItem);
+
+          if (idArr.includes(chosenItem) && newQuantity >= chosenQuantity) {
+            console.log("Purchase made!");
+            var newTotal = newQuantity - chosenQuantity;
+            connection.query(
+              `UPDATE product SET stock_quantity = ${newTotal} WHERE id = ${chosenItem}`
+            );
+
+            getStuff();
+
+          } else {
+            console.log("That wont work.");
+            getStuff();
+          }
         }
       });
   });
