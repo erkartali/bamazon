@@ -53,7 +53,6 @@ function purchaseItem() {
         var chosenItem = answer.item;
         var chosenQuantity = answer.quantity;
         chosenQuantity = Number(chosenQuantity);
-        // console.log(`chosen quantity: ${chosenQuantity}`);
         var someVar = [];
 
         var availableQuantity = connection.query(
@@ -68,31 +67,33 @@ function purchaseItem() {
         );
 
         function setValue(value) {
-            
+          if (value[0] != undefined) {
             availableQuantity = value;
-            newQuantity = availableQuantity[0].stock_quantity;
-            console.log(newQuantity);
-          var idArr = [];
-
-          for (var i = 0; i < results.length; i++) {
-            idArr.push(results[i].id);
-          }
-
-          chosenItem = parseInt(chosenItem);
-
-          if (idArr.includes(chosenItem) && newQuantity >= chosenQuantity) {
-            console.log("Purchase made!");
-            var newTotal = newQuantity - chosenQuantity;
-            connection.query(
-              `UPDATE product SET stock_quantity = ${newTotal} WHERE id = ${chosenItem}`
-            );
-
-            getStuff();
-
+              chosenItem = parseInt(chosenItem);
+              var idArr = [];
+              for (var i = 0; i < results.length; i++) {
+                idArr.push(results[i].id);
+              }
+    
+              newQuantity = availableQuantity[0].stock_quantity;
+    
+              if (idArr.includes(chosenItem) && newQuantity >= chosenQuantity) {
+                console.log("Purchase made!");
+                var newTotal = newQuantity - chosenQuantity;
+                connection.query(
+                  `UPDATE product SET stock_quantity = ${newTotal} WHERE id = ${chosenItem}`
+                );
+    
+                getStuff();
+              } else {
+                console.log("Not enough items in stock.");
+                getStuff();
+              }
           } else {
-            console.log("That wont work.");
-            getStuff();
+              console.log("That is not an available item.")
+              getStuff();
           }
+        //   
         }
       });
   });
