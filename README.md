@@ -25,7 +25,13 @@ the following istructions will be run from the command line.
 
 ### Screenshots
 
+<img width="1001" alt="Screen Shot 2020-05-22 at 11 55 52 AM" src="https://user-images.githubusercontent.com/61101099/82691257-38dcbc00-9c23-11ea-98fa-7a3a95a9d91e.png">
 
+<img width="1014" alt="Screen Shot 2020-05-22 at 12 00 06 PM" src="https://user-images.githubusercontent.com/61101099/82691609-ccae8800-9c23-11ea-93e9-738e606cab6d.png">
+
+<img width="1016" alt="Screen Shot 2020-05-22 at 11 57 02 AM" src="https://user-images.githubusercontent.com/61101099/82691375-6de90e80-9c23-11ea-9a05-0500b2328525.png">
+
+<img width="1015" alt="Screen Shot 2020-05-22 at 11 58 31 AM" src="https://user-images.githubusercontent.com/61101099/82691468-93761800-9c23-11ea-9000-ce040a6d0731.png">
 
 ### Dependencies
 
